@@ -8,7 +8,7 @@ using namespace std;
 class Word
 {
 public:
-    std::string text;
+   string text;
     bool isUsed;
     int num_of_connectable_words;
 };
@@ -73,7 +73,6 @@ void write_word_to_kaladont_game(string w)
     kaladont_file << w << endl;
     //kaladont_file.close();
 }
-
 vector<Word> get_all_words_from_file()
 {
     vector<Word> all_words;
@@ -103,9 +102,9 @@ vector<Word> get_acceptable_words(string lastTwoLetters)
 }
 void fill_nested_list_with_words_lists(vector<Word> &aceptable_list)
 {
-    // za svaki element u listi
-    //pronađi zadnja dva slova
-    //i na temelju ta dva slova napravi listu
+    //For every element in a list
+        //Find last two letters
+        //And based on those, make a new list of connectable words
     for (Word &word : aceptable_list)
     {
         vector<Word> newlis = get_acceptable_words(word.text.substr(word.text.length() - 2, 2));
