@@ -8,7 +8,7 @@ using namespace std;
 class Word
 {
 public:
-   string text;
+    string text;
     bool isUsed;
     int num_of_connectable_words;
 };
@@ -103,13 +103,14 @@ vector<Word> get_acceptable_words(string lastTwoLetters)
 void fill_nested_list_with_words_lists(vector<Word> &aceptable_list)
 {
     //For every element in a list
-        //Find last two letters
-        //And based on those, make a new list of connectable words
+    //Find last two letters
+    //And based on those, make a new list of connectable words
     for (Word &word : aceptable_list)
     {
         vector<Word> newlis = get_acceptable_words(word.text.substr(word.text.length() - 2, 2));
         word.num_of_connectable_words = newlis.size();
     }
+    cout << "fill_nested_list_with_words_lists done" << endl;
 }
 void set_is_used(string word)
 {
@@ -119,4 +120,5 @@ void set_is_used(string word)
                              { return ww.text.compare(word) == 0; });
         found->isUsed = true;
     }
+    cout << "set_is_used done" << endl;
 }
