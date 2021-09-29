@@ -1,12 +1,25 @@
-#include "word.hpp"
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <algorithm>
 #include <string>
-
 using namespace std;
 
+class Word
+{
+public:
+    std::string text;
+    bool isUsed;
+    int num_of_connectable_words;
+};
+
+bool operator<(const Word &s1, const Word &s2)
+{
+    if (s1.num_of_connectable_words < s2.num_of_connectable_words)
+        return true;
+    else
+        return false;
+}
 ofstream kaladont_file("game_kaladont.txt");
 vector<Word> all_words;
 vector<string> words_to_write;
@@ -61,7 +74,7 @@ void write_word_to_kaladont_game(string w)
     //kaladont_file.close();
 }
 
-vector<Word> get_all_words()
+vector<Word> get_all_words_from_file()
 {
     vector<Word> all_words;
     string line;
