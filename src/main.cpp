@@ -14,25 +14,7 @@ const string KA = "ka";
 const string KALADONT = "KALADONT";
 vector<vector<Word>> jagged_words;
 void write_all_words();
-void create_all_files()
-{
-    string alphabet{"abcdefghijklmnopqrstuvwxyz"};
-    std::wstring abeceda= L"abcćčdđefghijklmnopqrsštuvwxyzž";
 
-    for (int i = 0; i < abeceda.length(); i++)
-    {
-        for (int j = 0; j < abeceda.length(); j++)
-        {
-            string folder = "groups/";
-            string two_letters = "";
-            two_letters =(abeceda.substr(i, 1)).append(abeceda.substr(j, 1));
-            two_letters = two_letters.append(".txt");
-            string full_path = folder.append(two_letters);
-            std::ofstream file(full_path);
-            file.close();
-        }
-    }
-}
 int main()
 {
     int counter = 1;
@@ -60,7 +42,6 @@ int main()
 void make_vector_of_vectors()
 {
     string alphabet{"abcdefghijklmnopqrstuvwxyz"};
-    std::wstring abeceda= L"abcćčdđefghijklmnopqrsštuvwxyzž";
 
     for (int i = 0; i < alphabet.length(); i++)
     {
@@ -83,8 +64,10 @@ void make_vector_of_vectors()
                 word.letter_group = word.text.substr(0, 2);
                 word.first_two = word.text.substr(0, 2);
                 word.last_two = word.text.substr(word.text.length() - 2, 2);
-
-                temp.push_back(word);
+                if (word.last_two.compare(KA) != 0)
+                {
+                    temp.push_back(word);
+                }
             }
             if (temp.size() > 0)
             {
@@ -181,7 +164,6 @@ void fill_nested_list_with_words_lists(vector<Word> &aceptable_list)
         vector<Word> newlis = get_acceptable_words(word.text.substr(word.text.length() - 2, 2));
         word.num_of_connectable_words = newlis.size();
     }
-    // cout << "fill_nested_list_with_words_lists done" << endl;
 }
 void set_is_used(string word)
 {
@@ -200,7 +182,7 @@ void set_is_used(string word)
                 if (jagged_words[row][col].text.compare(word) == 0)
                 {
                     jagged_words[row][col].isUsed = true;
-                    // cout << "set_is_used done" << endl;
+                    //erase
                 }
             }
         }
