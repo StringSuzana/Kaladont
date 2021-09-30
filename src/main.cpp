@@ -7,35 +7,15 @@
 
 using namespace std;
 
-
-/**
- * @brief 
- * 
- * @param s1 
- * @param s2 
- * @return true 
- * @return false 
- */
-bool operator<(const Word &s1, const Word &s2)
-{
-    if (s1.num_of_connectable_words < s2.num_of_connectable_words)
-        return true;
-    else
-        return false;
-}
 ofstream kaladont_file("game_kaladont.txt");
 vector<Word> all_words;
 vector<string> words_to_write;
 
-vector<Word> get_all_words_from_file();
-vector<Word> get_acceptable_words(string lastTwoLetters);
-void fill_nested_list_with_words_lists(vector<Word> &aceptable_list);
-void set_is_used(string word);
-void write_word_to_kaladont_game(string w);
-string choose_next_word(string w);
+vector<vector<Word>> jagged_words;
 
 int main()
 {
+    //create_all_files();
     int counter = 1;
     all_words = get_all_words_from_file();
 
@@ -55,6 +35,24 @@ int main()
     }
 
     return 0;
+}
+void create_all_files()
+{
+    string alphabet{"abcdefghijklmnopqrstuvwxyz"};
+
+    for (int i = 0; i < alphabet.length(); i++)
+    {
+        for (int j = 0; j < alphabet.length(); j++)
+        {
+            string folder = "groups/";
+            string two_letters = "";
+            two_letters = (alphabet.substr(i, 1)).append(alphabet.substr(j, 1));
+            two_letters = two_letters.append(".txt");
+            string full_path = folder.append(two_letters);
+            std::ofstream file(full_path);
+            //file.close();
+        }
+    }
 }
 
 string choose_next_word(string w)
@@ -85,10 +83,17 @@ vector<Word> get_all_words_from_file()
     {
         while (getline(kaladont_words, line))
         {
-            Word word;
-            word.isUsed = false;
-            word.text = line;
-            all_words.push_back(word);
+            if (line.length() > 2)
+            {
+                Word word;
+                word.isUsed = false;
+                word.text = line;
+                word.letter_group =  word.text.substr(0, 2);
+                word.first_two = word.text.substr(0, 2);
+                word.last_two = word.text.substr(word.text.length() - 2, 2);
+
+                all_words.push_back(word);
+            }
         }
         kaladont_words.close();
         cout << "Done reading the file" << endl;
