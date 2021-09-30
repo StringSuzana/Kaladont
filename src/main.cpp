@@ -3,16 +3,19 @@
 #include <fstream>
 #include <algorithm>
 #include <string>
+#include "Word.hpp"
+
 using namespace std;
 
-class Word
-{
-public:
-    string text;
-    bool isUsed;
-    int num_of_connectable_words;
-};
 
+/**
+ * @brief 
+ * 
+ * @param s1 
+ * @param s2 
+ * @return true 
+ * @return false 
+ */
 bool operator<(const Word &s1, const Word &s2)
 {
     if (s1.num_of_connectable_words < s2.num_of_connectable_words)
@@ -36,7 +39,7 @@ int main()
     int counter = 1;
     all_words = get_all_words_from_file();
 
-    auto starting_word = all_words[65];
+    auto starting_word = all_words[66];
     write_word_to_kaladont_game(starting_word.text);
     set_is_used(starting_word.text);
 
