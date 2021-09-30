@@ -11,34 +11,56 @@ ofstream kaladont_file("game_kaladont.txt");
 vector<Word> all_words;
 vector<string> words_to_write;
 const string KA = "ka";
+const string KALADONT = "KALADONT";
 vector<vector<Word>> jagged_words;
+void write_all_words();
+void create_all_files()
+{
+    string alphabet{"abcdefghijklmnopqrstuvwxyz"};
+    std::wstring abeceda= L"abcćčdđefghijklmnopqrsštuvwxyzž";
 
+    for (int i = 0; i < abeceda.length(); i++)
+    {
+        for (int j = 0; j < abeceda.length(); j++)
+        {
+            string folder = "groups/";
+            string two_letters = "";
+            two_letters =(abeceda.substr(i, 1)).append(abeceda.substr(j, 1));
+            two_letters = two_letters.append(".txt");
+            string full_path = folder.append(two_letters);
+            std::ofstream file(full_path);
+            file.close();
+        }
+    }
+}
 int main()
 {
     int counter = 1;
     //all_words = get_all_words_from_file();
     make_vector_of_vectors();
 
-    auto starting_word = jagged_words[1][2];
+    auto starting_word = jagged_words[1][3];
     write_word_to_kaladont_game(starting_word.text);
     set_is_used(starting_word.text);
 
     words_to_write.push_back(starting_word.text);
 
-    while (words_to_write.size() >= counter)
+    while (words_to_write.size() >= counter && words_to_write[words_to_write.size() - 1].compare(KALADONT) != 0)
     {
         string next = choose_next_word(words_to_write[words_to_write.size() - 1]);
-        write_word_to_kaladont_game(next);
+        //write_word_to_kaladont_game(next);
         set_is_used(next);
         words_to_write.push_back(next);
         counter++;
     }
+    write_all_words();
     kaladont_file.close();
     return 0;
 }
 void make_vector_of_vectors()
 {
     string alphabet{"abcdefghijklmnopqrstuvwxyz"};
+    std::wstring abeceda= L"abcćčdđefghijklmnopqrsštuvwxyzž";
 
     for (int i = 0; i < alphabet.length(); i++)
     {
@@ -77,6 +99,10 @@ string choose_next_word(string w)
     string last_two_letters = w.substr(w.length() - 2, 2);
 
     auto filtered = get_acceptable_words(last_two_letters);
+    if (filtered.size() == 0)
+    {
+        return KALADONT;
+    }
     fill_nested_list_with_words_lists(filtered);
 
     sort(filtered.begin(), filtered.end(), [](Word &w, Word &ww)
@@ -88,6 +114,13 @@ string choose_next_word(string w)
 void write_word_to_kaladont_game(string w)
 {
     kaladont_file << w << endl;
+}
+void write_all_words()
+{
+    for (auto word : words_to_write)
+    {
+        write_word_to_kaladont_game(word);
+    }
 }
 vector<Word> get_all_words_from_file()
 {
