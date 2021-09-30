@@ -12,13 +12,23 @@ vector<Word> all_words;
 vector<string> words_to_write;
 
 vector<vector<Word>> jagged_words;
-
+void read_jagged_vector()
+{
+    for (size_t row = 0; row < jagged_words.size(); ++row)
+    {
+        for (size_t col = 0; col < jagged_words[row].size(); ++col)
+        {
+            cout << jagged_words[row][col].letter_group << endl;
+        }
+       
+    }
+}
 int main()
 {
-    //create_all_files();
     int counter = 1;
-    all_words = get_all_words_from_file();
-
+    //all_words = get_all_words_from_file();
+    make_vector_of_vectors();
+    read_jagged_vector();
     auto starting_word = all_words[66];
     write_word_to_kaladont_game(starting_word.text);
     set_is_used(starting_word.text);
@@ -36,7 +46,7 @@ int main()
 
     return 0;
 }
-void create_all_files()
+void make_vector_of_vectors()
 {
     string alphabet{"abcdefghijklmnopqrstuvwxyz"};
 
@@ -49,8 +59,26 @@ void create_all_files()
             two_letters = (alphabet.substr(i, 1)).append(alphabet.substr(j, 1));
             two_letters = two_letters.append(".txt");
             string full_path = folder.append(two_letters);
-            std::ofstream file(full_path);
-            //file.close();
+
+            string line;
+            ifstream kaladont_words(full_path);
+            vector<Word> temp;
+            while (getline(kaladont_words, line))
+            {
+                Word word;
+                word.isUsed = false;
+                word.text = line;
+                word.letter_group = word.text.substr(0, 2);
+                word.first_two = word.text.substr(0, 2);
+                word.last_two = word.text.substr(word.text.length() - 2, 2);
+
+                temp.push_back(word);
+            }
+            if (temp.size() > 0)
+            {
+              
+                jagged_words.push_back(temp);
+            }
         }
     }
 }
@@ -88,7 +116,7 @@ vector<Word> get_all_words_from_file()
                 Word word;
                 word.isUsed = false;
                 word.text = line;
-                word.letter_group =  word.text.substr(0, 2);
+                word.letter_group = word.text.substr(0, 2);
                 word.first_two = word.text.substr(0, 2);
                 word.last_two = word.text.substr(word.text.length() - 2, 2);
 

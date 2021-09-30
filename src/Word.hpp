@@ -36,6 +36,6 @@ string choose_next_word(string w);
  * Vector of vectors
  */
 void make_vector_of_vectors();
-void create_all_files();
+
 
 #endif /* F4C1AEBD_1082_4D22_9705_69FD091697D5 */
