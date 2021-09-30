@@ -37,14 +37,15 @@ void remove(string filename){
 void create_all_files()
 {
     string alphabet{"abcdefghijklmnopqrstuvwxyz"};
+    std::wstring abeceda= L"abcćčdđefghijklmnopqrsštuvwxyzž";
 
-    for (int i = 0; i < alphabet.length(); i++)
+    for (int i = 0; i < abeceda.length(); i++)
     {
-        for (int j = 0; j < alphabet.length(); j++)
+        for (int j = 0; j < abeceda.length(); j++)
         {
             string folder = "groups/";
             string two_letters = "";
-            two_letters = (alphabet.substr(i, 1)).append(alphabet.substr(j, 1));
+            two_letters = (abeceda.substr(i, 1)).append(abeceda.substr(j, 1));
             two_letters = two_letters.append(".txt");
             string full_path = folder.append(two_letters);
             std::ofstream file(full_path);
