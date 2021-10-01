@@ -26,6 +26,7 @@ bool operator<(const Word &s1, const Word &s2)
 
 vector<Word> get_all_words_from_file();
 vector<Word> get_acceptable_words(string lastTwoLetters);
+int get_acceptable_words_count(string last_two_letters);
 void fill_nested_list_with_words_lists(vector<Word> &aceptable_list);
 void set_is_used(string word);
 void write_word_to_kaladont_game(string w);
