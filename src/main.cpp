@@ -7,54 +7,45 @@
 
 using namespace std;
 
-class Result
-{
-    string word;
-    int count_to_kaladont;
-};
-
 ofstream kaladont_file("game_kaladont.txt");
 vector<Word> all_words;
 vector<string> words_to_write;
 const string KA = "ka";
 const string KALADONT = "KALADONT";
 vector<vector<Word>> jagged_words;
-vector<vector<Word>> jagged_starting_words;
-bool is_kaladont= false;
+vector<Word> starting_words;
+bool is_kaladont = false;
 
 void write_all_words();
 void write_result(string w, int size);
-void make_vector_of_vectors_for_starting_words();
+void make_vector_for_starting_words();
 int main()
 {
     //all_words = get_all_words_from_file();
     make_vector_of_vectors();
-    cout << "Done reading the file" << endl;
 
-    make_vector_of_vectors_for_starting_words();
+    make_vector_for_starting_words();
 
-    for (size_t row = 0; row < jagged_starting_words.size(); ++row)
+    for (size_t row = 0; row < starting_words.size(); ++row)
     {
-        for (size_t col = 0; col < jagged_starting_words[row].size(); ++col)
-        {
-            is_kaladont = false;//reset
-            words_to_write.clear();//reset
-            make_vector_of_vectors();//reset
-            auto starting_word = jagged_starting_words[row][col]; 
-            set_is_used(starting_word.text);
-            words_to_write.push_back(starting_word.text);
 
-           // while (words_to_write[words_to_write.size() - 1].compare(KALADONT) != 0)
-            while (is_kaladont == false)
-            {
-                string next = choose_next_word(words_to_write[words_to_write.size() - 1]);
-                set_is_used(next);
-                words_to_write.push_back(next);
-            }
-            cout << "From word: " << words_to_write[0] << endl;
-            cout << "words: " << words_to_write.size() << endl;
-            write_result(starting_word.text, words_to_write.size());
+        is_kaladont = false;      //reset
+        words_to_write.clear();   //reset
+        make_vector_of_vectors(); //reset
+        auto starting_word = starting_words[row];
+        set_is_used(starting_word.text);
+        words_to_write.push_back(starting_word.text);
+
+        // while (words_to_write[words_to_write.size() - 1].compare(KALADONT) != 0)
+        while (is_kaladont == false)
+        {
+            string next = choose_next_word(words_to_write[words_to_write.size() - 1]);
+            set_is_used(next);
+            words_to_write.push_back(next);
         }
+        cout << "From word: " << words_to_write[0] << endl;
+        cout << "words: " << words_to_write.size() << endl;
+        write_result(starting_word.text, words_to_write.size());
     }
     // write_all_words();
     kaladont_file.close();
@@ -103,7 +94,7 @@ void make_vector_of_vectors()
         }
     }
 }
-void make_vector_of_vectors_for_starting_words()
+void make_vector_for_starting_words()
 {
     string alphabet{"abcdefghijklmnopqrstuvwxyz"};
 
@@ -111,34 +102,36 @@ void make_vector_of_vectors_for_starting_words()
     {
         for (int j = 0; j < alphabet.length(); j++)
         {
-            string folder = "groups/";
             string two_letters = "";
             two_letters = (alphabet.substr(i, 1)).append(alphabet.substr(j, 1));
-            two_letters = two_letters.append(".txt");
-            string full_path = folder.append(two_letters);
-
-            string line;
-            ifstream kaladont_words(full_path);
-            vector<Word> temp;
-            while (getline(kaladont_words, line))
+            for (size_t row = 0; row < jagged_words.size(); ++row)
             {
+                auto found = find_if(jagged_words[row].begin(), jagged_words[row].end(), [two_letters](Word w)
+                                     {
+                                         if (w.text.size() >= 2)
+                                         {
+                                             return w.text.substr(w.text.size() - 2, 2).compare(two_letters) == 0;
+                                         }
+                                         else
+                                         {
+                                             return false;
+                                         }
+                                     });
                 Word word;
-                word.isUsed = false;
-                word.text = line;
-                word.letter_group = word.text.substr(0, 2);
-                word.first_two = word.text.substr(0, 2);
-                word.last_two = word.text.substr(word.text.length() - 2, 2);
-                if (word.last_two.compare(KA) != 0)
+                if (found != jagged_words[row].end())//if nothing is found, find_if returns pointer to end of searched vector
                 {
-                    temp.push_back(word);
+                    // cout << found->text << endl;
+                    word.text = found->text;
+                    if (word.text.size() >= 2 && word.text.substr(word.text.size() - 2, 2).compare(KA) != 0)
+                    {
+                        starting_words.push_back(word);
+                        break;
+                    }
                 }
-            }
-            if (temp.size() > 0)
-            {
-                jagged_starting_words.push_back(temp);
             }
         }
     }
+    cout << "size " << starting_words.size();
 }
 
 string choose_next_word(string w)
