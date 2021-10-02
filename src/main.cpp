@@ -26,7 +26,7 @@ int main()
 
     make_vector_for_starting_words();
 
-    for (size_t row = 0; row < starting_words.size(); ++row)
+    for (size_t row = 40; row < starting_words.size(); ++row)
     {
 
         is_kaladont = false;      //reset
@@ -118,7 +118,7 @@ void make_vector_for_starting_words()
                                          }
                                      });
                 Word word;
-                if (found != jagged_words[row].end())//if nothing is found, find_if returns pointer to end of searched vector
+                if (found != jagged_words[row].end()) //if nothing is found, find_if returns pointer to end of searched vector
                 {
                     // cout << found->text << endl;
                     word.text = found->text;
